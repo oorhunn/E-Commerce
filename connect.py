@@ -1,7 +1,8 @@
 #!/usr/bin/python
 import psycopg2
 from config import config
-
+from flask import current_app, g
+from flask.cli import with_appcontext
 def connect_dc(mode):
     """ Connect to the PostgreSQL database server """
     conn = None
@@ -34,5 +35,9 @@ def connect_dc(mode):
             print('Database connection closed.')
 
 
-if __name__ == '__main__':
-    connect()
+def get_db():
+    if 'db' not in g:
+        g.db =
+
+
+
