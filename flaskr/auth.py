@@ -28,7 +28,7 @@ def register():
         #     error = f"User {username} is already registered."
 
         if error is None:
-            inserts.insa(username, password)
+            inserts.inst(username, password)
 
             return redirect(url_for('auth.login'))
 

@@ -4,10 +4,11 @@ from model.users import Users
 from model.base import Session, engine, Base
 from datetime import date
 
-Base.metadata.create_all(engine)
-session = Session()
-abb = Users('anilllll', 'asdfasdf', date.today())
-session.add(abb)
-session.commit()
-session.close()
+def inst(username, password):
+    Base.metadata.create_all(engine)
+    session = Session()
+    abb = Users(username, password, date.today())
+    session.add(abb)
+    session.commit()
+    session.close()
 
