@@ -27,6 +27,7 @@ def connect_dc(mode):
 
             # close the communication with the PostgreSQL
             cur.close()
+            curr = conn.cursor()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
     if mode=='close':
@@ -34,10 +35,13 @@ def connect_dc(mode):
             conn.close()
             print('Database connection closed.')
 
+    return curr
 
-def get_db():
-    if 'db' not in g:
-        g.db =
+curr = connect_dc('connect')
+curr.
+
+
+
 
 
 
