@@ -16,7 +16,7 @@ def register():
         password = request.form['password']
         date = datetime.utcnow()
         body = {'username': username,
-                'password': password,
+                'password': generate_password_hash(password),
                 'register_date': date}
         error = None
         # mustaf you should do the regex shit in these lines
@@ -44,48 +44,50 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        # db = connect.connect_dc('connect')
         error = None
-        # user = db.execute(
-        #     'SELECT * FROM user WHERE username = ?', (username,)
-        # ).fetchone()
-        #
-        # if user is None:
-        #     error = 'Incorrect username.'
-        # elif not check_password_hash(user['password'], password):
-        #     error = 'Incorrect password.'
-        #
-        # if error is None:
-        #     session.clear()
-        #     session['user_id'] = user['id']
-        #     return redirect(url_for('index'))
+        ses = dbfuncs.dbsession()
+        condname = ses.query(Users).filter(Users.username==username).first()
+        condpass = ses.query(Users).filter(Users.password==password).first()
+
+        if condname is None:
+            error = 'Incorrect username.'
+        elif condpass is None:
+            error = 'Incorrect password.'
+        if error is None:
+            usid = ses.query(Users).filter(Users.username==username).first()
+            session.clear()
+            session['user_id'] = usid.id
+            return redirect(url_for('hello'))
+
+# vb = session.query(Users).filter(Users.username ==username).first()
+
 
         flash(error)
 
     return render_template('auth/login.html')
 
-@bp.before_app_request
-def load_logged_in_user():
-    user_id = session.get('user_id')
-
-    if user_id is None:
-        g.user = None
-    else:
-        g.user = get_db().execute(
-            'SELECT * FROM user WHERE id = ?', (user_id,)
-        ).fetchone()
-
-@bp.route('/logout')
-def logout():
-    session.clear()
-    return redirect(url_for('index'))
-
-def login_required(view):
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
-        if g.user is None:
-            return redirect(url_for('auth.login'))
-
-        return view(**kwargs)
-
-    return wrapped_view
+# @bp.before_app_request
+# def load_logged_in_user():
+#     user_id = session.get('user_id')
+#
+#     if user_id is None:
+#         g.user = None
+#     else:
+#         g.user = get_db().execute(
+#             'SELECT * FROM user WHERE id = ?', (user_id,)
+#         ).fetchone()
+#
+# @bp.route('/logout')
+# def logout():
+#     session.clear()
+#     return redirect(url_for('index'))
+#
+# def login_required(view):
+#     @functools.wraps(view)
+#     def wrapped_view(**kwargs):
+#         if g.user is None:
+#             return redirect(url_for('auth.login'))
+#
+#         return view(**kwargs)
+#
+#     return wrapped_view
