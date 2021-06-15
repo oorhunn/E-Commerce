@@ -16,6 +16,6 @@ def dbsession():
     session = Session()
     return session
 
-session = dbsession()
-us = session.query(Users).filter(Users.username=='anil').first()
-print(type(us.id))
+# session = dbsession()
+# us = session.query(Users).filter(Users.username=='anil').first()
+# print(type(us.id))

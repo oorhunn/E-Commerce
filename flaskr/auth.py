@@ -29,14 +29,10 @@ def register():
         for us in data:
             if f'{us.username}' == username:
                 error = 'this user already registered'
-
         if error is None:
             dbfuncs.inster(body)
-
             return redirect(url_for('auth.login'))
-
         flash(error)
-
     return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET', 'POST'))
@@ -48,7 +44,6 @@ def login():
         ses = dbfuncs.dbsession()
         condname = ses.query(Users).filter(Users.username==username).first()
         condpass = ses.query(Users).filter(Users.password==password).first()
-
         if condname is None:
             error = 'Incorrect username.'
         elif condpass is None:
@@ -58,36 +53,27 @@ def login():
             session.clear()
             session['user_id'] = usid.id
             return redirect(url_for('hello'))
-
-# vb = session.query(Users).filter(Users.username ==username).first()
-
-
         flash(error)
-
     return render_template('auth/login.html')
 
-# @bp.before_app_request
-# def load_logged_in_user():
-#     user_id = session.get('user_id')
-#
-#     if user_id is None:
-#         g.user = None
-#     else:
-#         g.user = get_db().execute(
-#             'SELECT * FROM user WHERE id = ?', (user_id,)
-#         ).fetchone()
-#
-# @bp.route('/logout')
-# def logout():
-#     session.clear()
-#     return redirect(url_for('index'))
-#
-# def login_required(view):
-#     @functools.wraps(view)
-#     def wrapped_view(**kwargs):
-#         if g.user is None:
-#             return redirect(url_for('auth.login'))
-#
-#         return view(**kwargs)
-#
-#     return wrapped_view
+@bp.before_app_request
+def load_logged_in_user():
+    user_id = session.get('user_id')
+
+
+
+@bp.route('/logout')
+def logout():
+    session.clear()
+    return redirect(url_for('hello'))
+
+def login_required(view):
+    @functools.wraps(view)
+    def wrapped_view(**kwargs):
+        if session.get('user_id') is None:
+            print('anan')
+            return redirect(url_for('auth.login'))
+
+        return view(**kwargs)
+
+    return wrapped_view
