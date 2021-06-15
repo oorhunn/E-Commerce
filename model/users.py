@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, Date
+from sqlalchemy import Column, String, Integer
 from model.base import Base
 
 class Users(Base):
@@ -7,7 +7,7 @@ class Users(Base):
     id = Column(Integer, primary_key=True)
     username = Column(String)
     password = Column(String)
-    register_date = Column(Date)
+    register_date = Column(String)
 
     def __init__(self, username, password, register_date):
         self.username = username

@@ -1,13 +1,11 @@
 import functools
-
+from datetime import datetime
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
-import connect
 import dbfuncs
-from flaskr.db import get_db
-import inserts
+from model.users import Users
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -16,19 +14,24 @@ def register():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        # db = connect.connect_dc('connect')
+        date = datetime.utcnow()
+        body = {'username': username,
+                'password': password,
+                'register_date': date}
         error = None
-
+        # mustaf you should do the regex shit in these lines
         if not username:
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        # elif db.execute(
-        #     'SELECT name FROM userdb WHERE name = ?', username)is not None:
-        #     error = f"User {username} is already registered."
+        ses = dbfuncs.dbsession()
+        data = ses.query(Users).all()
+        for us in data:
+            if f'{us.username}' == username:
+                error = 'this user already registered'
 
         if error is None:
-            inserts.inst(username, password)
+            dbfuncs.inster(body)
 
             return redirect(url_for('auth.login'))
 
@@ -41,21 +44,21 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-        db = connect.connect_dc('connect')
+        # db = connect.connect_dc('connect')
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?', (username,)
-        ).fetchone()
-
-        if user is None:
-            error = 'Incorrect username.'
-        elif not check_password_hash(user['password'], password):
-            error = 'Incorrect password.'
-
-        if error is None:
-            session.clear()
-            session['user_id'] = user['id']
-            return redirect(url_for('index'))
+        # user = db.execute(
+        #     'SELECT * FROM user WHERE username = ?', (username,)
+        # ).fetchone()
+        #
+        # if user is None:
+        #     error = 'Incorrect username.'
+        # elif not check_password_hash(user['password'], password):
+        #     error = 'Incorrect password.'
+        #
+        # if error is None:
+        #     session.clear()
+        #     session['user_id'] = user['id']
+        #     return redirect(url_for('index'))
 
         flash(error)
 
