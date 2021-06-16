@@ -15,7 +15,17 @@ def inster(kwargs):
 def dbsession():
     session = Session()
     return session
-
+# date = datetime.utcnow()
 # session = dbsession()
 # us = session.query(Users).filter(Users.username=='anil').first()
 # print(type(us.id))
+# body = {'username': 'anil',
+#         'password': 'anan',
+#         'proved': 't',
+#         'register_date': date}
+Base.metadata.create_all(engine)
+session = Session()
+
+condname = session.query(Users).filter(Users.username == 'mustaf').first()
+print(condname.username)
+

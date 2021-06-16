@@ -17,9 +17,10 @@ def register():
         date = datetime.utcnow()
         body = {'username': username,
                 'password': generate_password_hash(password),
+                'proved': 't',
                 'register_date': date}
         error = None
-        # mustaf you should do the regex shit in these lines
+        # mustaf you should do the regex shit from these lines
         if not username:
             error = 'Username is required.'
         elif not password:
@@ -42,11 +43,12 @@ def login():
         password = request.form['password']
         error = None
         ses = dbfuncs.dbsession()
-        condname = ses.query(Users).filter(Users.username==username).first()
-        condpass = ses.query(Users).filter(Users.password==password).first()
-        if condname is None:
+        temp = ses.query(Users).filter(Users.username==username).first()
+        print('............................')
+        print(check_password_hash(temp.password, password))
+        if temp.username != username:
             error = 'Incorrect username.'
-        elif condpass is None:
+        elif check_password_hash(temp.password, password) is False:
             error = 'Incorrect password.'
         if error is None:
             usid = ses.query(Users).filter(Users.username==username).first()
