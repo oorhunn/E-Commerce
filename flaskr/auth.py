@@ -31,7 +31,7 @@ def register():
             if f'{us.username}' == username:
                 error = 'this user already registered'
         if error is None:
-            dbfuncs.inster(body)
+            dbfuncs.userinserter(body)
             return redirect(url_for('auth.login'))
         flash(error)
     return render_template('auth/register.html')
@@ -44,8 +44,6 @@ def login():
         error = None
         ses = dbfuncs.dbsession()
         temp = ses.query(Users).filter(Users.username==username).first()
-        print('............................')
-        print(check_password_hash(temp.password, password))
         if temp.username != username:
             error = 'Incorrect username.'
         elif check_password_hash(temp.password, password) is False:
@@ -61,7 +59,6 @@ def login():
 @bp.before_app_request
 def load_logged_in_user():
     user_id = session.get('user_id')
-
 
 
 @bp.route('/logout')

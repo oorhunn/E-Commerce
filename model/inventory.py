@@ -11,11 +11,13 @@ class Inventory(Base):
     price = Column(Float)
     size = Column(String)
     register_date = Column(String)
+    photo_link = Column(String)
 
-    def __init__(self, category, name, quantity, price, size,register_date):
+    def __init__(self, category, name, quantity, price, size,register_date, photo_link):
         self.category = category
         self.name = name
         self.quantity = quantity
         self.price = price
         self.size = size
         self.register_date = register_date
+        self.photo_link = photo_link
