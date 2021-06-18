@@ -46,3 +46,27 @@ def add_product():
             dbfuncs.inventoryinserter(body)
             return redirect(url_for('hello'))
     return render_template('product/create.html')
+
+@bp.route('/<int:id>/update', methods=('POST','GET'))
+@login_required
+def update(id):
+
+    if request.method == 'POST':
+        try:
+            category = request.form['category']
+            name = request.form['name']
+            quantity = request.form['quantity']
+            price = request.form['price']
+            size = request.form['size']
+            photo_link = request.form['photo_link']
+            ses = dbfuncs.dbsession()
+            product_to_update = ses.query(Inventory).filter(Inventory.id==id).first()
+            product_to_update.update(request.form.to_dict())
+            ses.commit()
+            ses.close()
+
+            return redirect(url_for('hello'))
+        except:
+            abort(400, 'product yok')
+
+    return render_template('product/update.html')

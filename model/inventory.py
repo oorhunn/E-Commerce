@@ -21,3 +21,9 @@ class Inventory(Base):
         self.size = size
         self.register_date = register_date
         self.photo_link = photo_link
+    def update(self, kwargs):
+        print('update is alive')
+        for key in kwargs:
+            value = kwargs[key]
+            if hasattr(self, key) and not isinstance(value, list):
+                setattr(self, key, value)
