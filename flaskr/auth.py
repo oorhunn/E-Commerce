@@ -20,7 +20,7 @@ def register():
                 'proved': 't',
                 'register_date': date}
         error = None
-        # mustaf you should do the regex shit from these lines
+        # TODO mustaf you should do the regex shit from these lines
         if not username:
             error = 'Username is required.'
         elif not password:

@@ -12,11 +12,33 @@ bp = Blueprint('product', __name__,url_prefix='/product')
 
 @bp.route('/')
 def index():
-    dbses = dbfuncs.dbsession()
-    all_products = dbses.query(Inventory).all()
-    for product in all_products:
-        print(product.name)
-    return render_template('product/index.html', posts=product.name)
+    # TODO limit count of query
+    keys = Inventory.columns_to_dict(Inventory).keys()
+    all_products = dbfuncs.dbsession().query(Inventory).all()
+    prod_cat = []
+    prod_name = []
+    prod_quantity = []
+    prod_price = []
+    prod_size = []
+    for p in all_products:
+        prod_name.append(p.name)
+    for p in all_products:
+        prod_cat.append(p.category)
+    for p in all_products:
+        prod_size.append(p.size)
+    for p in all_products:
+        prod_quantity.append(p.quantity)
+    for p in all_products:
+        prod_price.append(p.price)
+    info_products = {
+        'category': prod_cat,
+        'name': prod_name,
+        'quantity':prod_quantity,
+        'price': prod_price,
+        'size': prod_size
+    }
+    info_products = [(k,v) for k, v in info_products.items()]
+    return render_template('product/index.html', category=prod_cat, keys=keys, name=prod_name)
 
 @bp.route('/create', methods=('GET','POST'))
 @login_required

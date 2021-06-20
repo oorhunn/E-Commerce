@@ -1,5 +1,4 @@
-import datetime
-
+import model
 from model.users import Users
 from model.base import Session, engine, Base
 from datetime import datetime
@@ -12,6 +11,7 @@ def userinserter(kwargs):
     session.add(abb)
     session.commit()
     session.close()
+
 def dbsession():
     session = Session()
     return session
@@ -31,4 +31,11 @@ def inventorydelete(id):
     session.delete(temp)
     session.commit()
 
-
+# session = dbsession()
+# all_products = session.query(Inventory).all()
+#
+# keys = Inventory.columns_to_dict(Inventory).keys()
+#
+# for k in keys:
+#     for p in all_products:
+#         print(k, '----->', p.name)

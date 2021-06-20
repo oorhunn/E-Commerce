@@ -27,3 +27,8 @@ class Inventory(Base):
             value = kwargs[key]
             if hasattr(self, key) and not isinstance(value, list):
                 setattr(self, key, value)
+    def columns_to_dict(self):
+        dict_ = {}
+        for key in self.__mapper__.c.keys():
+            dict_[key] = getattr(self, key)
+        return dict_
