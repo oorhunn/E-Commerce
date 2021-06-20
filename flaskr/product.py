@@ -70,3 +70,9 @@ def update(id):
             abort(400, 'product yok')
 
     return render_template('product/update.html')
+
+@bp.route('/<int:id>/delete',methods=('POST',))
+@login_required
+def  delete(id):
+    dbfuncs.inventorydelete(id)
+    return redirect(url_for('hello'))

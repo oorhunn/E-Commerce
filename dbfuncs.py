@@ -17,7 +17,6 @@ def dbsession():
     return session
 
 def inventoryinserter(kwargs):
-
     Base.metadata.create_all(engine)
     session = Session()
     anan = Inventory(**kwargs)
@@ -25,12 +24,11 @@ def inventoryinserter(kwargs):
     session.commit()
     session.close()
 
-# Base.metadata.create_all(engine)
-# session = Session()
-# anan = session.query(Inventory).all()
-# for a in anan:
-#     print(a.name)
-# condname = session.query(Users).filter(Users.username == 'mustaf').first()
-# print(condname.username)
+def inventorydelete(id):
+    Base.metadata.create_all(engine)
+    session = Session()
+    temp = session.query(Inventory).get(id)
+    session.delete(temp)
+    session.commit()
 
 
