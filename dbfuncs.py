@@ -31,14 +31,3 @@ def inventorydelete(id):
     session.delete(temp)
     session.commit()
 
-date = datetime.utcnow()
-body = {
-    'category': 'Tulum',
-    'name': 'isci tulumu',
-    'quantity': 5,
-    'price': 14.5,
-    'size': 'M',
-    'register_date': date,
-    'photo_link': 'asdfghjkl'
-}
-inventoryinserter(body)

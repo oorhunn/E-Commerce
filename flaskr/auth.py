@@ -70,7 +70,6 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if session.get('user_id') is None:
-            print('anan')
             return redirect(url_for('auth.login'))
 
         return view(**kwargs)

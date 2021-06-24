@@ -2,7 +2,7 @@ import datetime
 import json
 from dataclasses import dataclass
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify
+    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify,session
 )
 from werkzeug.exceptions import abort
 from model.inventory import Inventory
@@ -15,7 +15,9 @@ bp = Blueprint('product', __name__,url_prefix='/product')
 @bp.route('/')
 def index():
     # TODO limit count of query
-
+    id = session.get('user_id')
+    admin_name = dbfuncs.dbsession().query(Users).filter(Users.id==id).first()
+    # TODO add some privilege for admin users
     temp = dbfuncs.dbsession().query(Inventory).all()
 
     return jsonify(temp)
