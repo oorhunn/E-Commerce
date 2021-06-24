@@ -1,9 +1,9 @@
 import model
+import json
 from model.users import Users
 from model.base import Session, engine, Base
 from datetime import datetime
 from model.inventory import Inventory
-
 def userinserter(kwargs):
     Base.metadata.create_all(engine)
     session = Session()
@@ -31,11 +31,14 @@ def inventorydelete(id):
     session.delete(temp)
     session.commit()
 
-# session = dbsession()
-# all_products = session.query(Inventory).all()
-#
-# keys = Inventory.columns_to_dict(Inventory).keys()
-#
-# for k in keys:
-#     for p in all_products:
-#         print(k, '----->', p.name)
+date = datetime.utcnow()
+body = {
+    'category': 'Tulum',
+    'name': 'isci tulumu',
+    'quantity': 5,
+    'price': 14.5,
+    'size': 'M',
+    'register_date': date,
+    'photo_link': 'asdfghjkl'
+}
+inventoryinserter(body)

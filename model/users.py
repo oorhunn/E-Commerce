@@ -1,8 +1,15 @@
 from sqlalchemy import Column, String, Integer
 from model.base import Base
+from dataclasses import dataclass
 
+@dataclass
 class Users(Base):
     __tablename__ = 'users'
+    id: int
+    username: str
+    password: str
+    register_date: str
+    proved: str
 #    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
     username = Column(String)

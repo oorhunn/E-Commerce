@@ -1,7 +1,18 @@
 from sqlalchemy import Column, String, Integer, Float
-from model.base import Base
 
+from model.base import Base
+from dataclasses import dataclass
+
+@dataclass
 class Inventory(Base):
+    id: int
+    category:str
+    name: str
+    quantity: int
+    price: float
+    size: str
+    register_date: str
+    photo_link: str
     __tablename__ = 'inventory'
 #    __table_args__ = {'extend_existing': True}
     id = Column(Integer, primary_key=True)
@@ -21,6 +32,7 @@ class Inventory(Base):
         self.size = size
         self.register_date = register_date
         self.photo_link = photo_link
+
     def update(self, kwargs):
         print('update is alive')
         for key in kwargs:
