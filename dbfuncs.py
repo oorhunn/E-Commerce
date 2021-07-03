@@ -4,6 +4,11 @@ from model.users import Users
 from model.base import Session, engine, Base
 from datetime import datetime
 from model.inventory import Inventory
+from model.orders import Orders
+from model.products import Products
+
+date = datetime.utcnow()
+
 def userinserter(kwargs):
     Base.metadata.create_all(engine)
     session = Session()
@@ -30,4 +35,14 @@ def inventorydelete(id):
     temp = session.query(Inventory).get(id)
     session.delete(temp)
     session.commit()
+
+
+Base.metadata.create_all(engine)
+session = Session()
+
+anan = Orders(5 , date, 'mustaf', 64, 't', '123sdaf', 'asdfzxvc',)
+
+session.add(anan)
+session.commit()
+session.close()
 

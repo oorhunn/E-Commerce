@@ -22,6 +22,7 @@ def index():
 
     return jsonify(temp)
 
+
 @bp.route('/create', methods=('GET','POST'))
 @login_required
 def add_product():

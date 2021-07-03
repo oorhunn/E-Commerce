@@ -25,3 +25,11 @@
 	* id/product_name/date/price/kargo_no/
 4. admin database
 	* id/username/password/
+
+
+## OZAN SANLI TASKS
+1. anasayfa
+2. register/login
+3. account details
+4. order details
+5. products details

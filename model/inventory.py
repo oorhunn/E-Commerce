@@ -5,33 +5,24 @@ from dataclasses import dataclass
 
 @dataclass
 class Inventory(Base):
-    id: int
-    category:str
-    name: str
-    quantity: int
-    price: float
-    size: str
-    register_date: str
-    photo_link: str
-    __tablename__ = 'inventory'
-#    __table_args__ = {'extend_existing': True}
-    id = Column(Integer, primary_key=True)
-    category = Column(String)
-    name = Column(String)
-    quantity = Column(Integer)
-    price = Column(Float)
-    size = Column(String)
-    register_date = Column(String)
-    photo_link = Column(String)
+    product_id: int
+    product_name: str
+    product_quantity: int
+    category: str
+    warehouse_id: int
 
-    def __init__(self, category, name, quantity, price, size,register_date, photo_link):
+    __tablename__ = 'inventory'
+    product_id = Column(Integer, primary_key=True)
+    product_name = Column(String)
+    product_quantity = Column(Integer)
+    category = Column(String)
+    warehouse_id = Column(Integer)
+
+    def __init__(self, product_name, product_quantity, category, warehouse_id):
+        self.product_name = product_name
+        self.product_quantity = product_quantity
         self.category = category
-        self.name = name
-        self.quantity = quantity
-        self.price = price
-        self.size = size
-        self.register_date = register_date
-        self.photo_link = photo_link
+        self.warehouse_id = warehouse_id
 
     def update(self, kwargs):
         print('update is alive')
