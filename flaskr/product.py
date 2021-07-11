@@ -1,11 +1,11 @@
 import datetime
 import json
 from dataclasses import dataclass
+from model.warehouses import Warehouses
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, jsonify,session
 )
 from werkzeug.exceptions import abort
-from model.product_inv import ProductInv
 from model.products import Products
 from model.users import Users
 import dbfuncs
@@ -49,25 +49,27 @@ def baban():
 def add_product():
     if request.method == 'POST':
         category = request.form['category']
-        name = request.form['name']
-        quantity = request.form['quantity']
+        product_name = request.form['name']
+        product_quantity = request.form['quantity']
         price = request.form['price']
         size = request.form['size']
         register_date = datetime.datetime.utcnow()
         photo_link = request.form['photo_link']
+        warehouse = dbfuncs.warehouserr()
         error = None
         if error is not None:
             flash(error)
         else:
             ses = dbfuncs.dbsession()
             body = {
-                'category': category,
-                'name': name,
-                'quantity': quantity,
-                'price': price,
+                'product_name': product_name,
+                'warehouse': warehouse,
                 'size': size,
+                'price': price,
                 'register_date': register_date,
-                'photo_link': photo_link
+                'photo_link': photo_link,
+                'category': category,
+                'product_quantity': product_quantity
             }
             dbfuncs.inventoryinserter(body)
             return redirect(url_for('hello'))
