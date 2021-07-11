@@ -17,7 +17,7 @@ def register():
         date = datetime.utcnow()
         body = {'username': username,
                 'password': generate_password_hash(password),
-                'proved': 't',
+                'proved': True,
                 'register_date': date}
         error = None
         # TODO mustaf you should do the regex shit from these lines
@@ -51,7 +51,7 @@ def login():
         if error is None:
             usid = ses.query(Users).filter(Users.username==username).first()
             session.clear()
-            session['user_id'] = usid.id
+            session['user_id'] = usid.user_id
             return redirect(url_for('hello'))
         flash(error)
     return render_template('auth/login.html')

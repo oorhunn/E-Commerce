@@ -5,7 +5,7 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, jsonify,session
 )
 from werkzeug.exceptions import abort
-from model.inventory import Inventory
+from model.product_inv import ProductInv
 from model.users import Users
 import dbfuncs
 from flaskr.auth import login_required
@@ -18,7 +18,7 @@ def index():
     id = session.get('user_id')
     admin_name = dbfuncs.dbsession().query(Users).filter(Users.id==id).first()
     # TODO add some privilege for admin users
-    temp = dbfuncs.dbsession().query(Inventory).all()
+    temp = dbfuncs.dbsession().query(Products).all()
 
     return jsonify(temp)
 
@@ -65,7 +65,7 @@ def update(id):
             size = request.form['size']
             photo_link = request.form['photo_link']
             ses = dbfuncs.dbsession()
-            product_to_update = ses.query(Inventory).filter(Inventory.id==id).first()
+            product_to_update = ses.query(ProductInv).filter(ProductInv.id == id).first()
             product_to_update.update(request.form.to_dict())
             ses.commit()
             ses.close()
