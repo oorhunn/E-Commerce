@@ -3,7 +3,9 @@ from datetime import datetime
 from model.users import Users
 from model.orders import Orders
 from model.products import Products
-# from model.inventory import Inventory
+from model.suppliers import Suppliers
+from model.warehouses import Warehouses
+from model.materialinventory import MaterialInventory
 
 date = datetime.utcnow()
 
@@ -33,13 +35,5 @@ def dbsession():
 #     temp = session.query(Inventory).get(id)
 #     session.delete(temp)
 #     session.commit()
+# #
 
-# Base.metadata.create_all(engine)
-# session = Session()
-# # temp = session.query(Users).filter(Users.user_id==1).first()
-# # print(temp.username)
-# # firstor = Orders(temp, 5.0, date, 50, 'yarak')
-# pro = Products('ayakkabi', '45', 50.0, date, 'ananbaban')
-# session.add(pro)
-# session.commit()
-# session.close()

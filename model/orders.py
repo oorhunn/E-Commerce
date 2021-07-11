@@ -13,6 +13,8 @@ class Orders(Base):
     order_date: str
     order_quantity: int
     product_name: str
+    cargo_number: str
+    activeness: bool
 
     code = Column(Integer, primary_key=True)
     order_giver_id = Column(Integer, ForeignKey('users.user_id'))
@@ -20,12 +22,17 @@ class Orders(Base):
     order_date = Column(String)
     order_quantity = Column(Integer)
     product_name = Column(String, ForeignKey('products.product_name'))
+    product = relationship('Products', backref='orders')
     user = relationship('Users', backref='orders')
+    cargo_number = Column(String)
+    activeness = Column(Boolean)
 
-    def __init__(self, user, total_price, order_date, order_quantity, product_name):
+    def __init__(self, product, user, total_price, order_date, order_quantity, cargo_number, activeness):
+        self.product = product
         self.user = user
         self.total_price = total_price
         self.order_date = order_date
         self.order_quantity = order_quantity
-        self.product_name = product_name
+        self.cargo_number = cargo_number
+        self.activeness = activeness
 

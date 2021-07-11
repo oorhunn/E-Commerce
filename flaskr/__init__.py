@@ -32,9 +32,9 @@ def create_app(test_config=None):
     from . import auth
     app.register_blueprint(auth.bp)
 
-    # from . import product
-    # app.register_blueprint(product.bp)
-    # # app.add_url_rule('/', endpoint='index')
+    from . import product
+    app.register_blueprint(product.bp)
+    # app.add_url_rule('/', endpoint='index')
     #
     # from . import order
     # app.register_blueprint(order.bp)

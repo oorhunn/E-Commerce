@@ -6,6 +6,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 from model.product_inv import ProductInv
+from model.products import Products
 from model.users import Users
 import dbfuncs
 from flaskr.auth import login_required
@@ -16,12 +17,32 @@ bp = Blueprint('product', __name__,url_prefix='/product')
 def index():
     # TODO limit count of query
     id = session.get('user_id')
-    admin_name = dbfuncs.dbsession().query(Users).filter(Users.id==id).first()
+    admin_name = dbfuncs.dbsession().query(Users).filter(Users.user_id==id).first()
     # TODO add some privilege for admin users
     temp = dbfuncs.dbsession().query(Products).all()
-
+    aa = [{"photo_link": "ananbaban", "price": 50.0, "product_name": "ayakkabi",
+           "register_date": "2021-07-11 10:33:31.596816", "size": "45"}]
     return jsonify(temp)
 
+@bp.route('/anan')
+def anan():
+    return render_template('product/try.html')
+
+@bp.route('/baban')
+def baban():
+    temp = dbfuncs.dbsession().query(Products).all()
+    tempp = jsonify(temp)
+    i = 0
+    while i < len(tempp):
+        keys, values = zip(*tempp[i].items())
+        i = i + 1
+
+    out = {
+        'aaData':
+            [values]
+    }
+    print(out)
+    return tempp
 
 @bp.route('/create', methods=('GET','POST'))
 @login_required
@@ -78,6 +99,6 @@ def update(id):
 
 @bp.route('/<int:id>/delete',methods=('POST',))
 @login_required
-def  delete(id):
+def delete(id):
     dbfuncs.inventorydelete(id)
     return redirect(url_for('hello'))
