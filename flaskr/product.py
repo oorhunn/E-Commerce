@@ -13,36 +13,15 @@ from flaskr.auth import login_required
 
 bp = Blueprint('product', __name__,url_prefix='/product')
 
+
 @bp.route('/')
 def index():
     # TODO limit count of query
-    id = session.get('user_id')
-    admin_name = dbfuncs.dbsession().query(Users).filter(Users.user_id==id).first()
     # TODO add some privilege for admin users
     temp = dbfuncs.dbsession().query(Products).all()
-    aa = [{"photo_link": "ananbaban", "price": 50.0, "product_name": "ayakkabi",
-           "register_date": "2021-07-11 10:33:31.596816", "size": "45"}]
     return jsonify(temp)
 
-@bp.route('/anan')
-def anan():
-    return render_template('product/try.html')
 
-@bp.route('/baban')
-def baban():
-    temp = dbfuncs.dbsession().query(Products).all()
-    tempp = jsonify(temp)
-    i = 0
-    while i < len(tempp):
-        keys, values = zip(*tempp[i].items())
-        i = i + 1
-
-    out = {
-        'aaData':
-            [values]
-    }
-    print(out)
-    return tempp
 
 @bp.route('/create', methods=('GET','POST'))
 @login_required
@@ -55,25 +34,15 @@ def add_product():
         size = request.form['size']
         register_date = datetime.datetime.utcnow()
         photo_link = request.form['photo_link']
-        warehouse = dbfuncs.warehouserr()
+        warehouse = 1
         error = None
         if error is not None:
             flash(error)
         else:
-            ses = dbfuncs.dbsession()
-            body = {
-                'product_name': product_name,
-                'warehouse': warehouse,
-                'size': size,
-                'price': price,
-                'register_date': register_date,
-                'photo_link': photo_link,
-                'category': category,
-                'product_quantity': product_quantity
-            }
-            dbfuncs.inventoryinserter(body)
+            dbfuncs.inventoryinserter(product_name, size, price, register_date, photo_link, category, product_quantity, warehouse)
             return redirect(url_for('hello'))
     return render_template('product/create.html')
+
 
 @bp.route('/<int:id>/update', methods=('POST','GET'))
 @login_required
@@ -88,7 +57,7 @@ def update(id):
             size = request.form['size']
             photo_link = request.form['photo_link']
             ses = dbfuncs.dbsession()
-            product_to_update = ses.query(ProductInv).filter(ProductInv.id == id).first()
+            product_to_update = ses.query(Products).filter(Products.product_id == id).first()
             product_to_update.update(request.form.to_dict())
             ses.commit()
             ses.close()
@@ -99,7 +68,8 @@ def update(id):
 
     return render_template('product/update.html')
 
-@bp.route('/<int:id>/delete',methods=('POST',))
+
+@bp.route('/<int:id>/delete',methods=('POST','GET'))
 @login_required
 def delete(id):
     dbfuncs.inventorydelete(id)

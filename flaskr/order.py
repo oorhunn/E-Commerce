@@ -5,15 +5,39 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, url_for, jsonify,session
 )
 from werkzeug.exceptions import abort
-from model.product_inv import ProductInv
 from model.users import Users
 import dbfuncs
 from flaskr.auth import login_required
+from model.orders import Orders
+import dbfuncs
 
 bp = Blueprint('order', __name__, url_prefix='/order')
 
+
 @bp.route('/')
-def index():
+@login_required
+def show_order():
+    temp = dbfuncs.dbsession().query(Orders).all()
+
+    return jsonify(temp)
 
 
-    return None
+@bp.route('/<int:pro_id>/addorder', methods=('POST','GET'))
+@login_required
+def addproduct(pro_id):
+    try:
+        user = session.get('user_id')
+        print(type(user))
+        dbfuncs.add_order(pro_id, user)
+        return redirect(url_for('hello'))
+    except:
+        abort(400, 'ERRROOOOORRR')
+    return render_template('order/index.html')
+
+
+@bp.route('/<int:order_id>/deleteorder')
+@login_required
+def delete_order(order_id):
+    dbfuncs.delete_order(order_id)
+
+    return redirect(url_for('hello'))

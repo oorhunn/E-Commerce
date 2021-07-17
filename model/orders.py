@@ -12,18 +12,18 @@ class Orders(Base):
     total_price: float
     order_date: str
     order_quantity: int
-    product_name: str
+    product_id: int
     cargo_number: str
     activeness: bool
 
     code = Column(Integer, primary_key=True)
+    product = relationship('Products', backref='orders')
+    user = relationship('Users', backref='orders')
     order_giver_id = Column(Integer, ForeignKey('users.user_id'))
     total_price = Column(Float)
     order_date = Column(String)
     order_quantity = Column(Integer)
-    product_name = Column(String, ForeignKey('products.product_name'))
-    product = relationship('Products', backref='orders')
-    user = relationship('Users', backref='orders')
+    product_id = Column(Integer, ForeignKey('products.product_id'))
     cargo_number = Column(String)
     activeness = Column(Boolean)
 
