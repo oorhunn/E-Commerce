@@ -32,6 +32,7 @@ def addproduct(pro_id):
         return redirect(url_for('hello'))
     except:
         abort(400, 'ERRROOOOORRR')
+
     return render_template('order/index.html')
 
 
@@ -41,3 +42,11 @@ def delete_order(order_id):
     dbfuncs.delete_order(order_id)
 
     return redirect(url_for('hello'))
+
+
+@bp.route('/mustaf')
+@login_required
+def mustaf():
+
+
+    return render_template('order/index.html')
