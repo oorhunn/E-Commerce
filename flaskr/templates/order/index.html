@@ -8,11 +8,17 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
 
 </head>
-
+<style>
+    .a {
+        color: red
+    }
+</style>
 <body>
-<div id="mustaf">
 
-</div>
+    {% for key in keys %}
+    <button id="{{key}}" onclick="ekle(this.id)" class="a">ekle</button>
+    {% endfor %}
+
 </body>
 <script>
     function ekle(id){
@@ -24,29 +30,8 @@
             if (this.readyState == 4 && this.status == 200) {
             }
         };
+        console.log(id);
     }
-    function listele(){
-        var xhttp = new XMLHttpRequest();
-        var myreq = "/product/";
-        xhttp.open("GET", myreq);
-        xhttp.send();
-        xhttp.onreadystatechange = function() {
-            if (this.readyState == 4 && this.status == 200) {
-                var resultjson = JSON.parse(this.responseText);
-                var myContainer = document.getElementById("mustaf");
-                for(var i = 0; i<resultjson.length;i++){
-                    console.log(resultjson[i].product_id);
-                    var mybutton = document.createElement("button");
-                    mybutton.id = resultjson[i].product_id;
-                    mybutton.innerHTML = "sepeteekle";
-                    mybutton.onclick = function(){
-                        ekle(this.id);
-                    };
-                    myContainer.appendChild(mybutton);
-                }
-            }
-        };
-    }
-    listele();
+
 </script>
 </html>

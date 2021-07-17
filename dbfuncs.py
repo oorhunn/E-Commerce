@@ -67,7 +67,17 @@ def delete_order(order_id):
     session.commit()
     session.close()
 
-
+# Base.metadata.create_all(engine)
+# session = Session()
+# temp = session.query(Products).all()
+#
+# values = []
+# i = 0
+# while i < len(temp):
+#     values.append(temp[i].product_id)
+#     i = i + 1
+#
+# print(values)
 
 
 
