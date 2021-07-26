@@ -18,9 +18,18 @@ bp = Blueprint('order', __name__, url_prefix='/order')
 @bp.route('/')
 @login_required
 def show_order():
-    temp = dbfuncs.dbsession().query(Orders).all()
+    user = session.get('user_id')
+    # getting orders according to the user
+    orders = dbfuncs.dbsession().query(Orders).filter(Orders.order_giver_id==user, Orders.activeness==True).all()
+    totalPrice = 0
+    i = 0
+    while i < len(orders):
+        totalPrice = totalPrice + orders[i].total_price
+        i = i + 1
 
-    return jsonify(temp)
+
+
+    return jsonify(orders)
 
 
 @bp.route('/<int:pro_id>/addorder', methods=('POST','GET'))
@@ -56,3 +65,12 @@ def mustaf():
         i = i + 1
 
     return render_template('order/index.html', keys= values)
+
+@bp.route('/checkout')
+@login_required
+def checkout():
+
+
+
+
+    return 0
