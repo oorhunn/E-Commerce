@@ -39,4 +39,7 @@ def create_app(test_config=None):
     from . import order
     app.register_blueprint(order.bp)
 
+    from . import confirm
+    app.register_blueprint(confirm.bp)
+
     return app
