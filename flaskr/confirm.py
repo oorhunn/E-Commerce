@@ -1,26 +1,23 @@
-
 from flask import Flask, request, Blueprint, flash, redirect, render_template, request, session, url_for
-from itsdangerous import URLSafeSerializer, SignatureExpired
-from flask_mail import Mail
-
+from itsdangerous import URLSafeTimedSerializer, SignatureExpired
+import mailfuncs
 
 bp = Blueprint('confirm', __name__, url_prefix='/confirm')
 
-s = URLSafeSerializer('anan')
+s = URLSafeTimedSerializer('anan')
 
 
 @bp.route('/', methods=('GET', 'POST'))
 def index():
-    if request.method == 'GET':
-        return '<form action="/" method="POST"><input name="email"><input type="submit"></form>'
+    if request.method == 'POST':
+        email = request.form['email']
+        token = s.dumps(email, salt='salt')
+        mailfuncs.mailer(email,'anan', token)
+        return redirect(url_for('hello'))
+    return render_template('confirm/index.html')
 
-    email = request.form['email']
-    token = s.dumps(email, salt='baban')
-    print(token)
-    print(email)
-    return 'the email is {} token is {}'.format(email, token)
-
-
-
-
+@bp.route('/confirm_email/<token>')
+def confirm_email(token):
+    email = s.loads(token, salt='salt')
+    return 'Token Works!'
 
