@@ -66,9 +66,10 @@ def mustaf():
 
     return render_template('order/index.html', keys= values)
 
-@bp.route('/checkout')
+@bp.route('/checkout', methods=('GET','POST'))
 @login_required
 def checkout():
+    if request.method == 'POST':
 
 
 
