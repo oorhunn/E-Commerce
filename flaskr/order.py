@@ -1,4 +1,3 @@
-
 import json
 from dataclasses import dataclass
 from flask import (
@@ -11,6 +10,7 @@ from flaskr.auth import login_required
 from model.orders import Orders
 from model.products import Products
 import dbfuncs
+from payment import paymentfuncs
 
 bp = Blueprint('order', __name__, url_prefix='/order')
 
@@ -69,9 +69,78 @@ def mustaf():
 @bp.route('/checkout', methods=('GET','POST'))
 @login_required
 def checkout():
+    buyer = {
+        'id': 'BY789',
+        'name': 'John',
+        'surname': 'Doe',
+        'gsmNumber': '+905350000000',
+        'email': 'email@email.com',
+        'identityNumber': '74300864791',
+        'lastLoginDate': '2015-10-05 12:43:35',
+        'registrationDate': '2013-04-21 15:12:09',
+        'registrationAddress': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        'ip': '85.34.78.112',
+        'city': 'Istanbul',
+        'country': 'Turkey',
+        'zipCode': '34732'
+    }
+    basket_items = [
+        {
+            'id': 'BI101',
+            'name': 'Binocular',
+            'category1': 'Collectibles',
+            'category2': 'Accessories',
+            'itemType': 'PHYSICAL',
+            'price': '0.3'
+        },
+        {
+            'id': 'BI102',
+            'name': 'Game code',
+            'category1': 'Game',
+            'category2': 'Online Game Items',
+            'itemType': 'VIRTUAL',
+            'price': '0.5'
+        },
+        {
+            'id': 'BI103',
+            'name': 'Usb',
+            'category1': 'Electronics',
+            'category2': 'Usb / Cable',
+            'itemType': 'PHYSICAL',
+            'price': '0.2'
+        }
+    ]
+    address = {
+        'contactName': 'Jane Doe',
+        'city': 'Istanbul',
+        'country': 'Turkey',
+        'address': 'Nidakule Göztepe, Merdivenköy Mah. Bora Sok. No:1',
+        'zipCode': '34732'
+    }
     if request.method == 'POST':
+        # TODO regex shit for card info
+        cardHolderName = request.form['cardHolderName']
+        cardNumber = request.form['cardNumber']
+        expireMonth = request.form['expireMonth']
+        expireYear = request.form['expireYear']
+        cvc = request.form['cvc']
+        # turning payment_card to json
+        payment_card = {
+            'cardHolderName': cardHolderName,
+            'cardNumber': cardNumber,
+            'expireMonth': expireMonth,
+            'expireYear': expireYear,
+            'cvc': cvc
+        }
+        payment = paymentfuncs.create_payment(payment_card,buyer,address,basket_items)
+        return payment
+
+        # TODO regex shit for address info
+
+
+
+    return render_template('order/checkout.html')
 
 
 
 
-    return 0

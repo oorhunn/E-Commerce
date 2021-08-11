@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block header %}
+  <h1>{% block title %}Register{% endblock %}</h1>
+{% endblock %}
+
+{% block content %}
+  <form method="post">
+    <label for="cardHolderName">cardHolderName</label>
+    <input name="cardHolderName" id="cardHolderName" required>
+    <label for="cardNumber">cardNumber</label>
+    <input type="cardNumber" name="cardNumber" id="cardNumber" required>
+
+    <label for="expireMonth">expireMonth</label>
+    <input type="expireMonth" name="expireMonth" id="expireMonth" required>
+
+    <label for="expireYear">expireYear</label>
+    <input type="expireYear" name="expireYear" id="expireYear" required>
+
+    <label for="cvc">cvc</label>
+    <input type="cvc" name="cvc" id="cvc" required>
+
+    <input type="submit" value="Register">
+  </form>
+{% endblock %}

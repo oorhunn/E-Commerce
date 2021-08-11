@@ -1,5 +1,5 @@
-import api_test
 import iyzipay
+import json
 
 payment_card = {
     'cardHolderName': 'John Doe',
@@ -58,6 +58,14 @@ address = {
     'zipCode': '34732'
 }
 
+def api_test():
+    options = {
+
+        'base_url': iyzipay.base_url
+    }
+    api_test = iyzipay.ApiTest().retrieve(options)
+    temp = json.loads(api_test.read().decode('utf-8'))
+    return temp['status']
 
 def create_payment(payment_card, buyer, address, basket_items):
     error = None
@@ -66,7 +74,7 @@ def create_payment(payment_card, buyer, address, basket_items):
         'secret_key': iyzipay.secret_key,
         'base_url': iyzipay.base_url
     }
-    if api_test.api_test() != 'success':
+    if api_test() != 'success':
         error = 'Something went wrong with api test!!'
         return error
     totalPrice = 0.0
@@ -134,3 +142,4 @@ def refund(): # not checked its functionality
     refunds = iyzipay.Refund().create(request, options)
 
     return refunds.read().decode('utf-8')
+
