@@ -134,11 +134,7 @@ def checkout():
         }
         payment = paymentfuncs.create_payment(payment_card,buyer,address,basket_items)
         return payment
-
         # TODO regex shit for address info
-
-
-
     return render_template('order/checkout.html')
 
 

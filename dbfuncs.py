@@ -69,12 +69,7 @@ def delete_order(order_id):
 
 
 
-# Base.metadata.create_all(engine)
-# session = Session()
-# temp = session.query(Users).filter(Users.username=='crazanil504').first()
-# temp.username = 'faruk'
-# session.commit()
-# session.close()
+
 
 
 

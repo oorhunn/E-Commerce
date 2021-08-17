@@ -1,22 +1,22 @@
 import os
+from flask import Flask, render_template, send_from_directory, request
+from config import Config
+from werkzeug.utils import secure_filename
+import imghdr
 
-from flask import Flask
 
-
-def create_app(test_config=None):
+def create_app(config=Config):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
-    app.config.from_mapping(
-        SECRET_KEY='dev',
-        DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
-    )
+    app = Flask(__name__)
 
-    if test_config is None:
+    if config is None:
         # load the instance config, if it exists, when not testing
         app.config.from_pyfile('config.py', silent=True)
     else:
         # load the test config if passed in
-        app.config.from_mapping(test_config)
+        # app.config.from_mapping(test_config)
+
+        app.config.from_object(config)
 
     # ensure the instance folder exists
     try:
@@ -28,6 +28,42 @@ def create_app(test_config=None):
     @app.route('/hello')
     def hello():
         return 'Hello, World!'
+
+    def validate_image(stream):
+        header = stream.read(512)
+        stream.seek(0)
+        format = imghdr.what(None, header)
+        if not format:
+            return None
+        return '.' + (format if format != 'jpeg' else 'jpg')
+
+    @app.errorhandler(413)
+    def too_large(e):
+        return "File is too large", 413
+
+    @app.route('/product/fileupload')
+    def index():
+        files = os.listdir(app.config['UPLOAD_PATH'])
+        print(files)
+
+        return render_template('product/upload.html', files=files)
+
+    @app.route('/product/fileupload', methods=['POST'])
+    def upload_files():
+        uploaded_file = request.files['file']
+        filename = secure_filename(uploaded_file.filename)
+        if filename != '':
+            file_ext = os.path.splitext(filename)[1]
+            if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
+                    file_ext != validate_image(uploaded_file.stream):
+                return "Invalid image", 400
+
+            uploaded_file.save(os.path.join(app.config['UPLOAD_PATH'], filename))
+        return '', 204
+
+    @app.route('/product_images/<filename>')
+    def upload(filename):
+        return send_from_directory(app.config['UPLOAD_PATH'], filename)
 
     from . import auth
     app.register_blueprint(auth.bp)

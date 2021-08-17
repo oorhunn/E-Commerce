@@ -1,7 +1,7 @@
 import functools
 from datetime import datetime
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, redirect, render_template, request, session, url_for
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 import dbfuncs
@@ -13,9 +13,11 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 def register():
     if request.method == 'POST':
         username = request.form['username']
+        email = request.form['email']
         password = request.form['password']
         date = datetime.utcnow()
         body = {'username': username,
+                'email': email,
                 'password': generate_password_hash(password),
                 'proved': True,
                 'register_date': date}
@@ -25,6 +27,8 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif not email:
+            error = 'Email is required'
         ses = dbfuncs.dbsession()
         data = ses.query(Users).all()
         for us in data:
@@ -60,6 +64,8 @@ def login():
 def load_logged_in_user():
     user_id = session.get('user_id')
     print('user id is------->', user_id)
+
+
 
 
 @bp.route('/logout')

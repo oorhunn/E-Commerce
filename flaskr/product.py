@@ -1,24 +1,29 @@
 import datetime
-import json
-from dataclasses import dataclass
-from model.warehouses import Warehouses
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify,session
+    Blueprint, flash, g, redirect, render_template, request, url_for, jsonify,session, send_from_directory, app
 )
 from werkzeug.exceptions import abort
 from model.products import Products
-from model.users import Users
 import dbfuncs
 from flaskr.auth import login_required
+import imghdr
+import os
+from werkzeug.utils import secure_filename
+from config import Config
 
-bp = Blueprint('product', __name__,url_prefix='/product')
 
+bp = Blueprint('product', __name__, url_prefix='/product')
+
+UPLOAD_PATH = './product_images/'
+UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
+MAX_CONTENT_LENGTH = 2 * 1024 * 1024
 
 @bp.route('/')
 def index():
     # TODO limit count of query
     # TODO add some privilege for admin users
     temp = dbfuncs.dbsession().query(Products).all()
+
     return jsonify(temp)
 
 
@@ -74,3 +79,5 @@ def update(id):
 def delete(id):
     dbfuncs.inventorydelete(id)
     return redirect(url_for('hello'))
+
+
