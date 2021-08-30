@@ -38,14 +38,22 @@ def add_product():
         price = request.form['price']
         size = request.form['size']
         register_date = datetime.datetime.utcnow()
-        photo_link = request.form['photo_link']
-        warehouse = 1
+        body = {
+            'product_name': product_name,
+            'size': size,
+            'price': price,
+            'register_date': register_date,
+            'category': category,
+            'product_quantity': product_quantity,
+            'photo_link': None,
+            'warehouse_id': None
+        }
         error = None
         if error is not None:
             flash(error)
         else:
-            dbfuncs.inventoryinserter(product_name, size, price, register_date, photo_link, category, product_quantity, warehouse)
-            return redirect(url_for('hello'))
+            dbfuncs.inventoryinserter(body)
+            return redirect(url_for('file_upl'))
     return render_template('product/create.html')
 
 
@@ -79,5 +87,7 @@ def update(id):
 def delete(id):
     dbfuncs.inventorydelete(id)
     return redirect(url_for('hello'))
+
+
 
 

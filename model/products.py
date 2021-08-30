@@ -24,13 +24,13 @@ class Products(Base):
     size = Column(String)
     price = Column(Float)
     register_date = Column(String)
-    photo_link = Column(String)
-    warehouse_id = Column(Integer, ForeignKey('warehouses.warehouse_id'))
+    photo_link = Column(String, nullable=True)
+    warehouse_id = Column(Integer, ForeignKey('warehouses.warehouse_id'), nullable=True)
     warehouse = relationship('Warehouses', backref='products')
 
-    def __init__(self, product_name, size, price, register_date, photo_link, category, product_quantity, warehouse):
+    def __init__(self, product_name, size, price, register_date, photo_link, category, product_quantity, warehouse_id):
         self.product_name = product_name
-        self.warehouse = warehouse
+        self.warehouse_id = warehouse_id
         self.size = size
         self.price = price
         self.register_date = register_date
@@ -39,7 +39,7 @@ class Products(Base):
         self.product_quantity = product_quantity
 
     def update(self, kwargs):
-        print('update is alive')
+        print('product update is alive')
         for key in kwargs:
             value = kwargs[key]
             if hasattr(self, key) and not isinstance(value, list):

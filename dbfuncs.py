@@ -22,16 +22,6 @@ def dbsession():
     return session
 
 
-def inventoryinserter(product_name, size, price, date, link, category, quantity, warehouse_id):
-    Base.metadata.create_all(engine)
-    ses = Session()
-    temp = ses.query(Warehouses).filter(Warehouses.warehouse_id==warehouse_id).first()
-    a = Products(product_name, size, price, date, link, category, quantity, temp)
-    ses.add(a)
-    ses.commit()
-    ses.close()
-
-
 def inventorydelete(id):
     Base.metadata.create_all(engine)
     session = Session()
@@ -68,13 +58,23 @@ def delete_order(order_id):
     session.close()
 
 
+def inventoryinserter(kwargs):
+    Base.metadata.create_all(engine)
+    session = Session()
+    abb = Products(**kwargs)
+    session.add(abb)
+    session.commit()
+    session.close()
 
-
-
-
-
-
-
-
-
-
+def product_id_founder():
+    Base.metadata.create_all(engine)
+    session = Session()
+    temp = session.query(Products).all()
+    i = 0
+    highest = 0
+    while i < len(temp):
+        compared = temp[i].product_id
+        if compared > highest:
+            highest = compared
+        i = i + 1
+    return highest

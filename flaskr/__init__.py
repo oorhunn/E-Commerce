@@ -1,8 +1,11 @@
 import os
 from flask import Flask, render_template, send_from_directory, request
+
+import dbfuncs
 from config import Config
 from werkzeug.utils import secure_filename
 import imghdr
+from model.products import Products
 
 
 def create_app(config=Config):
@@ -42,16 +45,28 @@ def create_app(config=Config):
         return "File is too large", 413
 
     @app.route('/product/fileupload')
-    def index():
+    def file_upl():
         files = os.listdir(app.config['UPLOAD_PATH'])
-        print(files)
-
         return render_template('product/upload.html', files=files)
 
     @app.route('/product/fileupload', methods=['POST'])
     def upload_files():
         uploaded_file = request.files['file']
         filename = secure_filename(uploaded_file.filename)
+        print(type(filename))
+        print(filename)
+        body = {
+            'photo_link': filename
+        }
+        pro_id = dbfuncs.product_id_founder()
+        ses = dbfuncs.dbsession()
+        product_to_photo = ses.query(Products).filter(Products.product_id==pro_id).first()
+        print(product_to_photo)
+        product_to_photo.update(body)
+        print(product_to_photo)
+        ses.commit()
+        ses.close()
+
         if filename != '':
             file_ext = os.path.splitext(filename)[1]
             if file_ext not in app.config['UPLOAD_EXTENSIONS'] or \
