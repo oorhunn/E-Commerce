@@ -48,6 +48,7 @@ def add_product():
             'photo_link': None,
             'warehouse_id': None
         }
+        # TODO add something to warehouse id
         error = None
         if error is not None:
             flash(error)
