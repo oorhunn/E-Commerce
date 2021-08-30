@@ -53,17 +53,17 @@ def create_app(config=Config):
     def upload_files():
         uploaded_file = request.files['file']
         filename = secure_filename(uploaded_file.filename)
-        print(type(filename))
-        print(filename)
-        body = {
-            'photo_link': filename
-        }
-        pro_id = dbfuncs.product_id_founder()
         ses = dbfuncs.dbsession()
+        pro_id = dbfuncs.product_id_founder()
         product_to_photo = ses.query(Products).filter(Products.product_id==pro_id).first()
-        print(product_to_photo)
+        if product_to_photo.photo_link is None:
+            newstr = filename
+        else:
+            newstr = filename + ',' +product_to_photo.photo_link
+        body = {
+            'photo_link': newstr
+        }
         product_to_photo.update(body)
-        print(product_to_photo)
         ses.commit()
         ses.close()
 
