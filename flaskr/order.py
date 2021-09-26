@@ -23,13 +23,19 @@ def show_order():
     orders = dbfuncs.dbsession().query(Orders).filter(Orders.order_giver_id==user, Orders.activeness==True).all()
     totalPrice = 0
     i = 0
+    product_names = []
+    product_quantity = []
+    sep_price = []
+
     while i < len(orders):
         totalPrice = totalPrice + orders[i].total_price
+        product_names.append(orders[i])
+
         i = i + 1
+    print('product names output------>', product_names)
+    print('total price output----->', totalPrice)
 
-
-
-    return jsonify(orders)
+    return render_template('order/index.html')
 
 
 @bp.route('/<int:pro_id>/addorder', methods=('POST','GET'))
@@ -37,7 +43,7 @@ def show_order():
 def addproduct(pro_id):
     try:
         user = session.get('user_id')
-        print(type(user))
+        print('add order has been activated')
         dbfuncs.add_order(pro_id, user)
         return redirect(url_for('hello'))
     except:
@@ -53,18 +59,6 @@ def delete_order(order_id):
 
     return redirect(url_for('hello'))
 
-
-@bp.route('/mustaf')
-@login_required
-def mustaf():
-    temp = dbfuncs.dbsession().query(Products).all()
-    values = []
-    i = 0
-    while i < len(temp):
-        values.append(temp[i].product_id)
-        i = i + 1
-
-    return render_template('order/index.html', keys= values)
 
 @bp.route('/checkout', methods=('GET','POST'))
 @login_required

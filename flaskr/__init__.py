@@ -90,7 +90,7 @@ def create_app(config=Config):
     from . import order
     app.register_blueprint(order.bp)
 
-    from . import confirm
-    app.register_blueprint(confirm.bp)
+    from . import shop
+    app.register_blueprint(shop.bp)
 
     return app

@@ -11,12 +11,12 @@ import os
 from werkzeug.utils import secure_filename
 from config import Config
 
-
 bp = Blueprint('product', __name__, url_prefix='/product')
 
 UPLOAD_PATH = './product_images/'
 UPLOAD_EXTENSIONS = ['.jpg', '.png', '.gif']
 MAX_CONTENT_LENGTH = 2 * 1024 * 1024
+
 
 @bp.route('/')
 def index():
@@ -25,7 +25,6 @@ def index():
     temp = dbfuncs.dbsession().query(Products).all()
 
     return jsonify(temp)
-
 
 
 @bp.route('/create', methods=('GET','POST'))
